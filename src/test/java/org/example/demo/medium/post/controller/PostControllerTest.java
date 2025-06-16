@@ -1,6 +1,7 @@
 package org.example.demo.medium.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.demo.post.controller.dto.PostChange;
 import org.example.demo.post.controller.dto.PostSave;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,7 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,7 +78,7 @@ class PostControllerTest {
         //given
         //when
         //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/posts/{id}", 123456))
+        mockMvc.perform(get("/api/posts/{id}", 123456))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("존재하지않는 Post 입니다"))
                 .andDo(print());
@@ -128,4 +128,37 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    void 게시글_작성자는_게시글을_수정할_수_있다() throws Exception {
+        //given
+        PostChange.Request request = new PostChange.Request();
+        request.setTitle("수정 타이틀");
+        request.setContent("수정 테스트 중입니다");
+        request.setWriterId(1); //TODO: JWT 적용 후 삭제
+        String requestStr = new ObjectMapper().writeValueAsString(request);
+
+        //when
+        //then
+        mockMvc.perform(put("/api/posts/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestStr))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").isString())
+                .andExpect(jsonPath("$.content").isString())
+                .andExpect(jsonPath("$.writerId").isNumber())
+                .andExpect(jsonPath("$.writer").isString())
+                .andExpect(jsonPath("$.createAt").isString())
+                .andExpect(jsonPath("$.modifiedAt").isString())
+                .andDo(print());
+    }
+
+    @Test
+    void 게시글_작성자는_게시글을_삭제할_수_있다() throws Exception {
+        //given
+        //when
+        //then
+        mockMvc.perform(delete("/api/posts/{id}", 1)
+                        .param("userId", "1")) // TODO: JWT 적용 후 수정
+                .andExpect(status().isOk());
+    }
 }

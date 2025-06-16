@@ -2,6 +2,7 @@ package org.example.demo.post.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.example.demo.post.controller.dto.PostChange;
 
 @Getter
 public class PostUpdate {
@@ -15,5 +16,13 @@ public class PostUpdate {
         this.id = id;
         this.title = title;
         this.content = content;
+    }
+
+    public static PostUpdate from(long postId, PostChange.Request postChange) {
+        return PostUpdate.builder()
+                .id(postId)
+                .title(postChange.getTitle())
+                .content(postChange.getContent())
+                .build();
     }
 }
