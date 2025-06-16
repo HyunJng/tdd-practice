@@ -7,6 +7,7 @@ import org.example.demo.common.exception.ErrorCode;
 import org.example.demo.common.service.port.DateHolder;
 import org.example.demo.post.domain.Post;
 import org.example.demo.post.domain.PostCreate;
+import org.example.demo.post.domain.PostUpdate;
 import org.example.demo.post.service.port.PostRepository;
 import org.example.demo.user.domain.User;
 import org.example.demo.user.service.port.UserRepository;
@@ -38,4 +39,23 @@ public class PostService {
                 .orElseThrow(() -> new CommonException(ErrorCode.RESOURCE_NOT_FOUND, "Post"));
     }
 
+    public Post update(PostUpdate postUpdate, long userId) {
+        Post post = postRepository.findById(postUpdate.getId())
+                .orElseThrow(() -> new CommonException(ErrorCode.RESOURCE_NOT_FOUND, "Post"));
+        if (!post.getWriter().getId().equals(userId)) {
+            throw new CommonException(ErrorCode.UNAUTHORIZED);
+        }
+
+        post = post.update(postUpdate, dateHolder);
+        return postRepository.save(post);
+    }
+
+    public void delete(long postId, long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CommonException(ErrorCode.RESOURCE_NOT_FOUND, "Post"));
+        if (!post.getWriter().getId().equals(userId)) {
+            throw new CommonException(ErrorCode.UNAUTHORIZED);
+        }
+        postRepository.delete(postId);
+    }
 }

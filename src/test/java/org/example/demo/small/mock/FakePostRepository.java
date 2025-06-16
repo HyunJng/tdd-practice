@@ -34,7 +34,7 @@ public class FakePostRepository implements PostRepository {
                     .content(post.getContent())
                     .writer(post.getWriter())
                     .createAt(post.getCreateAt())
-                    .modifyAt(post.getModifyAt())
+                    .modifiedAt(post.getModifiedAt())
                     .build();
             data.add(newPost);
             return newPost;
@@ -48,5 +48,10 @@ public class FakePostRepository implements PostRepository {
     @Override
     public Optional<Post> findById(Long id) {
         return data.stream().filter(item -> Objects.equals(item.getId(), id)).findFirst();
+    }
+
+    @Override
+    public void delete(long id) {
+        data.removeIf(item -> item.getId().equals(id));
     }
 }

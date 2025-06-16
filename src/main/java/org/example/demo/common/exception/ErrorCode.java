@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지않는 %1 입니다"),
-    BAD_REQUEST_PARAM_FORMAT(HttpStatus.BAD_REQUEST, "지원하지 않는 형식의 요청입니다");
+    BAD_REQUEST_PARAM_FORMAT(HttpStatus.BAD_REQUEST, "지원하지 않는 형식의 요청입니다"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
 
     @Getter
     private final HttpStatus status;

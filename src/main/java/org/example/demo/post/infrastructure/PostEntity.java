@@ -40,7 +40,7 @@ public class PostEntity {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .createAt(post.getCreateAt())
-                .modifyAt(post.getModifyAt())
+                .modifyAt(post.getModifiedAt())
                 .writer(UserEntity.from(post.getWriter()))
                 .build();
     }
@@ -51,7 +51,7 @@ public class PostEntity {
                 .title(title)
                 .content(content)
                 .createAt(createAt)
-                .modifyAt(modifyAt)
+                .modifiedAt(modifyAt)
                 .writer(writer.to())
                 .build();
     }

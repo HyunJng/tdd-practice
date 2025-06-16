@@ -40,7 +40,7 @@ public class PostSave {
                     .writer(post.getWriter().getUsername())
                     .content(post.getContent())
                     .createAt(post.getCreateAt())
-                    .modifiedAt(post.getModifyAt())
+                    .modifiedAt(post.getModifiedAt())
                     .build();
         }
     }

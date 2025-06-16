@@ -1,9 +1,11 @@
 package org.example.demo.small.post.service;
 
-import org.example.demo.post.domain.PostCreate;
-import org.example.demo.small.mock.FakePostRepository;
+import org.example.demo.common.exception.CommonException;
 import org.example.demo.post.domain.Post;
+import org.example.demo.post.domain.PostCreate;
+import org.example.demo.post.domain.PostUpdate;
 import org.example.demo.post.service.PostService;
+import org.example.demo.small.mock.FakePostRepository;
 import org.example.demo.small.mock.FakeUserRepository;
 import org.example.demo.small.mock.TestDateHolder;
 import org.example.demo.user.domain.User;
@@ -14,10 +16,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PostServiceTest {
 
     private PostService postService;
+    private final String NOW = "20250615123010";
 
     @BeforeEach
     void init() {
@@ -26,7 +30,7 @@ public class PostServiceTest {
         postService = PostService.builder()
                 .postRepository(fakePostRepository)
                 .userRepository(fakeUserRepository)
-                .dateHolder(new TestDateHolder("20250615123010"))
+                .dateHolder(new TestDateHolder(NOW))
                 .build();
         User user1 = User.builder()
                 .id(1L)
@@ -94,7 +98,7 @@ public class PostServiceTest {
         assertThat(result.getContent()).isEqualTo("내용");
         assertThat(result.getCreateAt()).isEqualTo("20250615123010");
         assertThat(result.getWriter().getId()).isEqualTo(1L);
-        assertThat(result.getModifyAt()).isNull();
+        assertThat(result.getModifiedAt()).isNull();
     }
 
     @Test
@@ -109,43 +113,61 @@ public class PostServiceTest {
         assertThat(post.getContent()).isEqualTo("테스트1 입니다");
         assertThat(post.getWriter().getId()).isEqualTo(1L);
         assertThat(post.getCreateAt()).isEqualTo("20250604000001");
-        assertThat(post.getModifyAt()).isNull();
+        assertThat(post.getModifiedAt()).isNull();
     }
 
     @Test
     void 게시글_작성자는_게시글을_수정할_수_있다() throws Exception {
         //given
-        
+        PostUpdate postUpdate = PostUpdate.builder()
+                .id(1)
+                .title("수정타이틀")
+                .content("수정된 내용입니다.")
+                .build();
+
         //when
+        Post updated = postService.update(postUpdate, 1);
 
         //then
+        assertThat(updated.getId()).isEqualTo(1);
+        assertThat(updated.getTitle()).isEqualTo("수정타이틀");
+        assertThat(updated.getContent()).isEqualTo("수정된 내용입니다.");
+        assertThat(updated.getModifiedAt()).isEqualTo(NOW);
     }
 
     @Test
     void 게시글_작성자가_아니면_게시글_수정할_수_없다() throws Exception {
         //given
-        
-        //when
+        PostUpdate postUpdate = PostUpdate.builder()
+                .id(1)
+                .title("수정타이틀")
+                .content("수정된 내용입니다.")
+                .build();
 
+        //when
         //then
+        assertThatThrownBy(() -> postService.update(postUpdate, 2))
+                .isInstanceOf(CommonException.class);
     }
 
     @Test
     void 게시글_작성자는_게시글을_삭제할_수_있다() throws Exception {
         //given
-
         //when
+        postService.delete(1, 1);
 
         //then
+        assertThatThrownBy(() -> postService.getById(1))
+                .isInstanceOf(CommonException.class);
     }
 
     @Test
     void 게시글_작성자가_아니면_게시글을_삭제할_수_없다() throws Exception {
         //given
-
         //when
-
         //then
+        assertThatThrownBy(() -> postService.delete(1, 2))
+                .isInstanceOf(CommonException.class);
     }
 
 }
