@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeUserRepository implements UserRepository {
 
-    private AtomicLong generatedId = new AtomicLong();
+    private AtomicLong generatedId = new AtomicLong(2);
     private List<User> data = new ArrayList<>();
 
     @Override
@@ -35,5 +35,10 @@ public class FakeUserRepository implements UserRepository {
             data.add(user);
             return user;
         }
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return data.stream().anyMatch(item -> item.getUsername().equals(username));
     }
 }

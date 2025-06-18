@@ -2,6 +2,7 @@ package org.example.demo.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.example.demo.common.service.port.DateHolder;
 
 @Getter
 public class User {
@@ -20,5 +21,13 @@ public class User {
         this.username = username;
         this.password = password;
         this.createAt = createAt;
+    }
+
+    public static User from(UserCreate userCreate, DateHolder dateHolder) {
+        return User.builder()
+                .username(userCreate.getUsername())
+                .password(userCreate.getPassword())
+                .createAt(dateHolder.now())
+                .build();
     }
 }

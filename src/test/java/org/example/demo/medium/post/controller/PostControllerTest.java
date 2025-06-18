@@ -1,6 +1,7 @@
 package org.example.demo.medium.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.demo.common.exception.ErrorCode;
 import org.example.demo.post.controller.dto.PostChange;
 import org.example.demo.post.controller.dto.PostSave;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ class PostControllerTest {
                         .param("page", "string")
                         .param("size", "string"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("지원하지 않는 형식의 요청입니다"))
+                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage()))
                 .andDo(print());
     }
 
