@@ -33,7 +33,7 @@ class UserControllerTest {
     void username은_최소_4글자_이상_10자_이하가_아니면_오류를_발생시킨다() throws Exception {
         //given
         SignUp.Request signup1 = new SignUp.Request();
-        signup1.setUsername("IamTester03");
+        signup1.setUsername("iamtester03");
         signup1.setPassword("testpw03");
 
         SignUp.Request signup2 = new SignUp.Request();
@@ -50,14 +50,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request1))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": username"))
                 .andDo(print());
 
         mockMvc.perform(post("/api/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request2))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": username"))
                 .andDo(print());
 
     }
@@ -83,14 +85,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request1))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": username"))
                 .andDo(print());
 
         mockMvc.perform(post("/api/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request2))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": username"))
                 .andDo(print());
 
     }
@@ -115,14 +119,16 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request1))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": password"))
                 .andDo(print());
 
         mockMvc.perform(post("/api/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request2))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": password"))
                 .andDo(print());
 
     }
@@ -143,7 +149,8 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request1))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage()))
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": password"))
                 .andDo(print());
 
     }

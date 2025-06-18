@@ -53,9 +53,9 @@ class PostControllerTest {
         //then
         mockMvc.perform(get("/api/posts")
                         .param("page", "string")
-                        .param("size", "string"))
+                        .param("size", "1"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": page"))
                 .andDo(print());
     }
 

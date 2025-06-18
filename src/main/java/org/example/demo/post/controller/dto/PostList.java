@@ -10,9 +10,9 @@ public class PostList {
 
     @Data
     public static class Request {
-        @Pattern(regexp = "\\d+", message = "BAD_REQUEST_PARAM_FORMAT")
+        @Pattern(regexp = "\\d+")
         private String page;
-        @Pattern(regexp = "\\d+", message = "BAD_REQUEST_PARAM_FORMAT")
+        @Pattern(regexp = "\\d+")
         private String size;
 
         public PageRequest to() {

@@ -21,9 +21,21 @@ public class GeneralExceptionAdvice {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorFormat> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException) {
-        ErrorCode errorCode = ErrorCode.valueOf(methodArgumentNotValidException.getFieldError().getDefaultMessage());
+        String cause = methodArgumentNotValidException.getFieldError().getCode();
+        String field = methodArgumentNotValidException.getFieldError().getField();
+
+        ErrorCode errorCode = getValidExceptionErrorCode(cause);
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(new ErrorFormat(errorCode.getMessage()));
+                .body(new ErrorFormat(errorCode.getMessage() + ": " + field));
+    }
+
+    private ErrorCode getValidExceptionErrorCode(String cause) {
+        return switch (cause) {
+            case "NotNull" -> ErrorCode.BAD_REQUEST_PARAM_NULL;
+            case "Size" -> ErrorCode.BAD_REQUEST_PARAM_SIZE;
+            case "Pattern" -> ErrorCode.BAD_REQUEST_PARAM_FORMAT;
+            default -> throw new IllegalStateException("Unexpected value: " + cause);
+        };
     }
 }
