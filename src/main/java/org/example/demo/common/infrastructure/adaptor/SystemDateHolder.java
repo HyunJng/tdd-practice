@@ -1,4 +1,4 @@
-package org.example.demo.common.infrastructure;
+package org.example.demo.common.infrastructure.adaptor;
 
 import lombok.RequiredArgsConstructor;
 import org.example.demo.common.service.port.DateHolder;

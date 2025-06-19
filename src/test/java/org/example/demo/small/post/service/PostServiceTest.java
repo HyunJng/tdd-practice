@@ -1,6 +1,6 @@
 package org.example.demo.small.post.service;
 
-import org.example.demo.common.exception.CommonException;
+import org.example.demo.exception.domain.CommonException;
 import org.example.demo.post.domain.Post;
 import org.example.demo.post.domain.PostCreate;
 import org.example.demo.post.domain.PostUpdate;

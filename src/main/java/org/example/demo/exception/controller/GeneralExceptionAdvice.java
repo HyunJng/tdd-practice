@@ -1,7 +1,10 @@
-package org.example.demo.common.exception;
+package org.example.demo.exception.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
+import org.example.demo.exception.domain.CommonException;
+import org.example.demo.exception.domain.ErrorCode;
+import org.example.demo.exception.controller.dto.ErrorFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,7 +1,7 @@
 package org.example.demo.small.user.service;
 
 
-import org.example.demo.common.exception.CommonException;
+import org.example.demo.exception.domain.CommonException;
 import org.example.demo.small.mock.FakePasswordEncoder;
 import org.example.demo.small.mock.FakeUserRepository;
 import org.example.demo.small.mock.TestDateHolder;
