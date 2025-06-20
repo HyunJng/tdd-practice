@@ -1,4 +1,4 @@
-package org.example.demo.common.service;
+package org.example.demo.common.util;
 
 public class StringUtils {
 

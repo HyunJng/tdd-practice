@@ -1,4 +1,4 @@
-package org.example.demo.exception.controller.dto;
+package org.example.demo.common.exception.controller.dto;
 
 import lombok.Getter;
 

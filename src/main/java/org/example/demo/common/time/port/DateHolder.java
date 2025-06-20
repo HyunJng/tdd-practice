@@ -1,4 +1,4 @@
-package org.example.demo.common.service.port;
+package org.example.demo.common.time.port;
 
 public interface DateHolder {
     String now();

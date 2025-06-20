@@ -1,7 +1,7 @@
 package org.example.demo.medium.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.demo.exception.domain.ErrorCode;
+import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.user.controller.dto.SignUp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

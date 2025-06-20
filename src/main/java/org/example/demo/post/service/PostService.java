@@ -2,9 +2,9 @@ package org.example.demo.post.service;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.example.demo.exception.domain.CommonException;
-import org.example.demo.exception.domain.ErrorCode;
-import org.example.demo.common.service.port.DateHolder;
+import org.example.demo.common.exception.domain.CommonException;
+import org.example.demo.common.exception.domain.ErrorCode;
+import org.example.demo.common.time.port.DateHolder;
 import org.example.demo.post.domain.Post;
 import org.example.demo.post.domain.PostCreate;
 import org.example.demo.post.domain.PostUpdate;

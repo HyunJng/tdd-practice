@@ -2,7 +2,7 @@ package org.example.demo.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.example.demo.common.service.port.DateHolder;
+import org.example.demo.common.time.port.DateHolder;
 
 @Getter
 public class User {

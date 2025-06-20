@@ -1,7 +1,7 @@
-package org.example.demo.common.infrastructure.adaptor;
+package org.example.demo.common.time;
 
 import lombok.RequiredArgsConstructor;
-import org.example.demo.common.service.port.DateHolder;
+import org.example.demo.common.time.port.DateHolder;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;

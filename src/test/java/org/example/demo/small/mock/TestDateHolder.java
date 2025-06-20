@@ -1,6 +1,6 @@
 package org.example.demo.small.mock;
 
-import org.example.demo.common.service.port.DateHolder;
+import org.example.demo.common.time.port.DateHolder;
 
 public class TestDateHolder implements DateHolder {
     private final String date;
