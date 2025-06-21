@@ -1,6 +1,6 @@
-package org.example.demo.user.infrastructure;
+package org.example.demo.common.encrypt.infrastructure;
 
-import org.example.demo.user.service.port.PasswordEncoder;
+import org.example.demo.common.encrypt.service.port.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 

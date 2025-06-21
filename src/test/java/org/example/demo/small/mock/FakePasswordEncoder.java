@@ -1,6 +1,6 @@
 package org.example.demo.small.mock;
 
-import org.example.demo.user.service.port.PasswordEncoder;
+import org.example.demo.common.encrypt.service.port.PasswordEncoder;
 
 public class FakePasswordEncoder implements PasswordEncoder {
 

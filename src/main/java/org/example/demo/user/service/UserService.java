@@ -7,7 +7,7 @@ import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.common.time.port.DateHolder;
 import org.example.demo.user.domain.User;
 import org.example.demo.user.domain.UserCreate;
-import org.example.demo.user.service.port.PasswordEncoder;
+import org.example.demo.common.encrypt.service.port.PasswordEncoder;
 import org.example.demo.user.service.port.UserRepository;
 import org.springframework.stereotype.Service;
 

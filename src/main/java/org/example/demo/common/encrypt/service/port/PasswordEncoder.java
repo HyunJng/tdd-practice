@@ -1,4 +1,4 @@
-package org.example.demo.user.service.port;
+package org.example.demo.common.encrypt.service.port;
 
 public interface PasswordEncoder {
 

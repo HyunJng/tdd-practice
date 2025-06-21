@@ -3,7 +3,7 @@ package org.example.demo.user.domain;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.demo.user.controller.dto.SignUp;
-import org.example.demo.user.service.port.PasswordEncoder;
+import org.example.demo.common.encrypt.service.port.PasswordEncoder;
 
 @Getter
 public class UserCreate {

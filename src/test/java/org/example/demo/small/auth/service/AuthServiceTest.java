@@ -1,0 +1,105 @@
+package org.example.demo.small.auth.service;
+
+
+import org.assertj.core.api.Assertions;
+import org.example.demo.auth.domain.LoginUser;
+import org.example.demo.auth.infrastructure.JwtManager;
+import org.example.demo.auth.infrastructure.vo.JwtProperties;
+import org.example.demo.auth.service.AuthService;
+import org.example.demo.common.exception.domain.CommonException;
+import org.example.demo.common.exception.domain.ErrorCode;
+import org.example.demo.small.mock.FakePasswordEncoder;
+import org.example.demo.small.mock.FakeUserRepository;
+import org.example.demo.small.mock.TestDateHolder;
+import org.example.demo.user.domain.User;
+import org.example.demo.user.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class AuthServiceTest {
+
+    private UserService userService;
+    private AuthService authService;
+    private JwtManager jwtManager;
+    private TestDateHolder testDateHolder;
+
+    private final String NOW = "20250620000001";
+
+    @BeforeEach
+    public void init() {
+        FakeUserRepository fakeUserRepository = new FakeUserRepository();
+        FakePasswordEncoder fakePasswordEncoder = new FakePasswordEncoder();
+        testDateHolder = new TestDateHolder(NOW);
+
+        userService = userService.builder()
+                .userRepository(fakeUserRepository)
+                .dateHolder(testDateHolder)
+                .passwordEncoder(fakePasswordEncoder)
+                .build();
+        jwtManager = JwtManager.builder()
+                .jwtProperties(new JwtProperties("bXktdmVyeS1zdHJvbmctand0LXNlY3JldC1rZXktdGhhdC1pcy1sb25nLWVub3VnaA=="))
+                .dateHolder(testDateHolder)
+                .build();
+        authService = AuthService.builder()
+                .passwordEncoder(new FakePasswordEncoder())
+                .userRepository(fakeUserRepository)
+                .jwtManager(jwtManager)
+                .build();
+
+        User user1 = User.builder()
+                .id(1L)
+                .username("tester01")
+                .password(fakePasswordEncoder.encode("testerpw1"))
+                .createAt("20250604000001")
+                .build();
+        fakeUserRepository.save(user1);
+    }
+
+    @Test
+    void 회원이_아니면_로그인에_실패한다() throws Exception {
+        //given
+        LoginUser loginUser = LoginUser.builder()
+                .username("imnotuser")
+                .password("1234")
+                .build();
+        //when
+        //then
+        assertThatThrownBy(() -> authService.login(loginUser))
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("user") );
+    }
+
+    @Test
+    void 비밀번호가_틀리면_로그인에_실패한다() throws Exception {
+        //given
+        LoginUser loginUser = LoginUser.builder()
+                .username("tester01")
+                .password("1234")
+                .build();
+        //when
+        //then
+        assertThatThrownBy(() -> authService.login(loginUser))
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.WRONG_REQUEST_PARAM_DATA.getMessage("password"));
+    }
+
+    @Test
+    void 로그인에_성공하면_유효한_jwt_토큰을_반환한다() throws Exception {
+        //given
+        testDateHolder.setUseRealTimeInOneTime();
+        LoginUser loginUser = LoginUser.builder()
+                .username("tester01")
+                .password("testerpw1")
+                .build();
+        //when
+        String loginToken = authService.login(loginUser);
+
+        //then
+        Assertions.assertThatCode(() -> {
+            jwtManager.validateToken(loginToken);
+        }).doesNotThrowAnyException();
+
+    }
+}
