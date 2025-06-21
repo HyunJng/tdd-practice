@@ -2,7 +2,7 @@ package org.example.demo.small.auth.service;
 
 
 import org.assertj.core.api.Assertions;
-import org.example.demo.auth.domain.LoginUser;
+import org.example.demo.auth.domain.UserLogin;
 import org.example.demo.auth.infrastructure.JwtManager;
 import org.example.demo.auth.infrastructure.vo.JwtProperties;
 import org.example.demo.auth.service.AuthService;
@@ -60,13 +60,13 @@ class AuthServiceTest {
     @Test
     void 회원이_아니면_로그인에_실패한다() throws Exception {
         //given
-        LoginUser loginUser = LoginUser.builder()
+        UserLogin userLogin = UserLogin.builder()
                 .username("imnotuser")
                 .password("1234")
                 .build();
         //when
         //then
-        assertThatThrownBy(() -> authService.login(loginUser))
+        assertThatThrownBy(() -> authService.login(userLogin))
                 .isInstanceOf(CommonException.class)
                 .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("user") );
     }
@@ -74,13 +74,13 @@ class AuthServiceTest {
     @Test
     void 비밀번호가_틀리면_로그인에_실패한다() throws Exception {
         //given
-        LoginUser loginUser = LoginUser.builder()
+        UserLogin userLogin = UserLogin.builder()
                 .username("tester01")
                 .password("1234")
                 .build();
         //when
         //then
-        assertThatThrownBy(() -> authService.login(loginUser))
+        assertThatThrownBy(() -> authService.login(userLogin))
                 .isInstanceOf(CommonException.class)
                 .hasMessageContaining(ErrorCode.WRONG_REQUEST_PARAM_DATA.getMessage("password"));
     }
@@ -89,12 +89,12 @@ class AuthServiceTest {
     void 로그인에_성공하면_유효한_jwt_토큰을_반환한다() throws Exception {
         //given
         testDateHolder.setUseRealTimeInOneTime();
-        LoginUser loginUser = LoginUser.builder()
+        UserLogin userLogin = UserLogin.builder()
                 .username("tester01")
                 .password("testerpw1")
                 .build();
         //when
-        String loginToken = authService.login(loginUser);
+        String loginToken = authService.login(userLogin);
 
         //then
         Assertions.assertThatCode(() -> {

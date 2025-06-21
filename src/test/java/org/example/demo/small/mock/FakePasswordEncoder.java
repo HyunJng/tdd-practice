@@ -8,4 +8,9 @@ public class FakePasswordEncoder implements PasswordEncoder {
     public String encode(String password) {
         return "encoded:" + password;
     }
+
+    @Override
+    public boolean isMatcher(String password, String target) {
+        return password.equals("encoded:" + target);
+    }
 }

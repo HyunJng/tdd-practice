@@ -35,7 +35,7 @@ public class GeneralExceptionAdvice {
 
     private ErrorCode getValidExceptionErrorCode(String cause) {
         return switch (cause) {
-            case "NotNull" -> ErrorCode.BAD_REQUEST_PARAM_NULL;
+            case "NotNull", "NotBlank" -> ErrorCode.BAD_REQUEST_PARAM_NULL;
             case "Size" -> ErrorCode.BAD_REQUEST_PARAM_SIZE;
             case "Pattern" -> ErrorCode.BAD_REQUEST_PARAM_FORMAT;
             default -> throw new IllegalStateException("Unexpected value: " + cause);
