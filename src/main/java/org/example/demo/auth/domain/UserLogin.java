@@ -25,6 +25,6 @@ public class UserLogin {
     }
 
     public boolean isCorrectPassword(PasswordEncoder passwordEncoder, String userPassword) {
-        return passwordEncoder.isMatcher(userPassword, password);
+        return passwordEncoder.isMatcher(password, userPassword);
     }
 }

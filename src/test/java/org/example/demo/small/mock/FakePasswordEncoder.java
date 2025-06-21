@@ -10,7 +10,7 @@ public class FakePasswordEncoder implements PasswordEncoder {
     }
 
     @Override
-    public boolean isMatcher(String password, String target) {
-        return password.equals("encoded:" + target);
+    public boolean isMatcher(String rawPassword, String encodedPassword) {
+        return encodedPassword.equals("encoded:" + rawPassword);
     }
 }

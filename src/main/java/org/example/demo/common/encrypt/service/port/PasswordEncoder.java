@@ -4,5 +4,5 @@ public interface PasswordEncoder {
 
     String encode(String password);
 
-    boolean isMatcher(String password, String target);
+    boolean isMatcher(String rawPassword, String encodedPassword);
 }

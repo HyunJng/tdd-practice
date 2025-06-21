@@ -19,7 +19,7 @@ public class PasswordEncoderImpl implements PasswordEncoder {
     }
 
     @Override
-    public boolean isMatcher(String password, String target) {
-        return bCryptPasswordEncoder.matches(password, target);
+    public boolean isMatcher(String rawPassword, String encodedPassword) {
+        return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
     }
 }
