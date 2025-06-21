@@ -1,6 +1,7 @@
 package org.example.demo.medium.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.demo.auth.infrastructure.JwtManager;
 import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.post.controller.dto.PostChange;
 import org.example.demo.post.controller.dto.PostSave;
@@ -31,6 +32,8 @@ class PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private JwtManager jwtManager;
 
     @Test
     void 게시글_목록을_조회할_수_있다() throws Exception {
@@ -91,7 +94,7 @@ class PostControllerTest {
         PostSave.Request request = new PostSave.Request();
         request.setTitle("테스트타이틀");
         request.setContent("게시글 생성 테스트입니다.");
-        request.setWriterId(1); // TODO: JWT로 변경
+        String token = jwtManager.createToken(1L);
 
         String requestStr = new ObjectMapper().writeValueAsString(request);
 
@@ -99,6 +102,7 @@ class PostControllerTest {
         //then
         mockMvc.perform(post("/api/posts")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(requestStr))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("테스트타이틀"))
@@ -115,7 +119,7 @@ class PostControllerTest {
         PostSave.Request request = new PostSave.Request();
         request.setTitle("테스트타이틀");
         request.setContent("게시글 생성 테스트입니다.");
-        request.setWriterId(123456); // TODO: JWT로 변경
+        String token = jwtManager.createToken(123456);
 
         String requestStr = new ObjectMapper().writeValueAsString(request);
 
@@ -123,6 +127,7 @@ class PostControllerTest {
         //then
         mockMvc.perform(post("/api/posts")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(requestStr))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("존재하지않는 USER 입니다"))
@@ -135,13 +140,15 @@ class PostControllerTest {
         PostChange.Request request = new PostChange.Request();
         request.setTitle("수정 타이틀");
         request.setContent("수정 테스트 중입니다");
-        request.setWriterId(1); //TODO: JWT 적용 후 삭제
+        String token = jwtManager.createToken(1L);
+
         String requestStr = new ObjectMapper().writeValueAsString(request);
 
         //when
         //then
         mockMvc.perform(put("/api/posts/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(requestStr))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").isString())
@@ -156,10 +163,11 @@ class PostControllerTest {
     @Test
     void 게시글_작성자는_게시글을_삭제할_수_있다() throws Exception {
         //given
+        String token = jwtManager.createToken(1L);
         //when
         //then
         mockMvc.perform(delete("/api/posts/{id}", 1)
-                        .param("userId", "1")) // TODO: JWT 적용 후 수정
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
 }

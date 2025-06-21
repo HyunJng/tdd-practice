@@ -10,7 +10,6 @@ public class PostChange {
     public static class Request {
         private String title;
         private String content;
-        private long writerId;
     }
 
     @Data
