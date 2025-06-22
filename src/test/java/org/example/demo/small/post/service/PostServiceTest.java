@@ -1,6 +1,7 @@
 package org.example.demo.small.post.service;
 
 import org.example.demo.common.exception.domain.CommonException;
+import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.post.domain.Post;
 import org.example.demo.post.domain.PostCreate;
 import org.example.demo.post.domain.PostUpdate;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PostServiceTest {
 
@@ -69,15 +71,17 @@ public class PostServiceTest {
         Page<Post> result = postService.findPageOrderByCreateAtDesc(pageable);
 
         //then
-        assertThat(result.getContent().get(0).getCreateAt()).isGreaterThan(result.getContent().get(1).getCreateAt());
-        assertThat(result.getContent().get(0).getTitle()).isEqualTo("테스트2");
-        assertThat(result.getContent().get(0).getWriter().getUsername()).isEqualTo("tester02");
-        assertThat(result.getContent().get(0).getContent()).isEqualTo("테스트2 입니다");
-        assertThat(result.getContent().get(0).getCreateAt()).isEqualTo("20250604000002");
-        assertThat(result.getContent().get(1).getTitle()).isEqualTo("테스트1");
-        assertThat(result.getContent().get(1).getWriter().getUsername()).isEqualTo("tester01");
-        assertThat(result.getContent().get(1).getContent()).isEqualTo("테스트1 입니다");
-        assertThat(result.getContent().get(1).getCreateAt()).isEqualTo("20250604000001");
+        assertAll(
+                () -> assertThat(result.getContent().get(0).getCreateAt()).isGreaterThan(result.getContent().get(1).getCreateAt()),
+                () -> assertThat(result.getContent().get(0).getTitle()).isEqualTo("테스트2"),
+                () -> assertThat(result.getContent().get(0).getWriter().getUsername()).isEqualTo("tester02"),
+                () -> assertThat(result.getContent().get(0).getContent()).isEqualTo("테스트2 입니다"),
+                () -> assertThat(result.getContent().get(0).getCreateAt()).isEqualTo("20250604000002"),
+                () -> assertThat(result.getContent().get(1).getTitle()).isEqualTo("테스트1"),
+                () -> assertThat(result.getContent().get(1).getWriter().getUsername()).isEqualTo("tester01"),
+                () -> assertThat(result.getContent().get(1).getContent()).isEqualTo("테스트1 입니다"),
+                () -> assertThat(result.getContent().get(1).getCreateAt()).isEqualTo("20250604000001")
+        );
     }
 
     @Test
@@ -93,12 +97,14 @@ public class PostServiceTest {
         Post result = postService.save(postCreate);
 
         //then
-        assertThat(result.getId()).isEqualTo(3L);
-        assertThat(result.getTitle()).isEqualTo("타이틀");
-        assertThat(result.getContent()).isEqualTo("내용");
-        assertThat(result.getCreateAt()).isEqualTo("20250615123010");
-        assertThat(result.getWriter().getId()).isEqualTo(1L);
-        assertThat(result.getModifiedAt()).isNull();
+        assertAll(
+                () -> assertThat(result.getId()).isEqualTo(3L),
+                () -> assertThat(result.getTitle()).isEqualTo("타이틀"),
+                () -> assertThat(result.getContent()).isEqualTo("내용"),
+                () -> assertThat(result.getCreateAt()).isEqualTo("20250615123010"),
+                () -> assertThat(result.getWriter().getId()).isEqualTo(1L),
+                () -> assertThat(result.getModifiedAt()).isNull()
+        );
     }
 
     @Test
@@ -108,12 +114,14 @@ public class PostServiceTest {
         Post post = postService.getById(1L);
 
         //then
-        assertThat(post.getId()).isEqualTo(1L);
-        assertThat(post.getTitle()).isEqualTo("테스트1");
-        assertThat(post.getContent()).isEqualTo("테스트1 입니다");
-        assertThat(post.getWriter().getId()).isEqualTo(1L);
-        assertThat(post.getCreateAt()).isEqualTo("20250604000001");
-        assertThat(post.getModifiedAt()).isNull();
+        assertAll(
+                () -> assertThat(post.getId()).isEqualTo(1L),
+                () -> assertThat(post.getTitle()).isEqualTo("테스트1"),
+                () -> assertThat(post.getContent()).isEqualTo("테스트1 입니다"),
+                () -> assertThat(post.getWriter().getId()).isEqualTo(1L),
+                () -> assertThat(post.getCreateAt()).isEqualTo("20250604000001"),
+                () -> assertThat(post.getModifiedAt()).isNull()
+        );
     }
 
     @Test
@@ -129,10 +137,12 @@ public class PostServiceTest {
         Post updated = postService.update(postUpdate, 1);
 
         //then
-        assertThat(updated.getId()).isEqualTo(1);
-        assertThat(updated.getTitle()).isEqualTo("수정타이틀");
-        assertThat(updated.getContent()).isEqualTo("수정된 내용입니다.");
-        assertThat(updated.getModifiedAt()).isEqualTo(NOW);
+        assertAll(
+                () -> assertThat(updated.getId()).isEqualTo(1),
+                () -> assertThat(updated.getTitle()).isEqualTo("수정타이틀"),
+                () -> assertThat(updated.getContent()).isEqualTo("수정된 내용입니다."),
+                () -> assertThat(updated.getModifiedAt()).isEqualTo(NOW)
+        );
     }
 
     @Test
@@ -147,7 +157,8 @@ public class PostServiceTest {
         //when
         //then
         assertThatThrownBy(() -> postService.update(postUpdate, 2))
-                .isInstanceOf(CommonException.class);
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.UNAUTHORIZED.getMessage());
     }
 
     @Test
@@ -158,7 +169,8 @@ public class PostServiceTest {
 
         //then
         assertThatThrownBy(() -> postService.getById(1))
-                .isInstanceOf(CommonException.class);
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("Post"));
     }
 
     @Test
@@ -167,7 +179,8 @@ public class PostServiceTest {
         //when
         //then
         assertThatThrownBy(() -> postService.delete(1, 2))
-                .isInstanceOf(CommonException.class);
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.UNAUTHORIZED.getMessage());
     }
 
 }

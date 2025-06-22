@@ -4,6 +4,7 @@ package org.example.demo.small.auth.service;
 import org.example.demo.auth.infrastructure.jwt.JwtManager;
 import org.example.demo.auth.infrastructure.jwt.JwtProperties;
 import org.example.demo.common.exception.domain.CommonException;
+import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.small.mock.TestDateHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,8 @@ class JwtManagerTest {
         //when
         //then
         assertThatThrownBy(() -> jwtManager.validateToken(token))
-                .isInstanceOf(CommonException.class);
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.EXPIRES_RESOURCES.getMessage("JWT token"));
     }
 
     @Test

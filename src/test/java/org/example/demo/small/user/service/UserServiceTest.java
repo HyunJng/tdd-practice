@@ -2,6 +2,7 @@ package org.example.demo.small.user.service;
 
 
 import org.example.demo.common.exception.domain.CommonException;
+import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.small.mock.FakePasswordEncoder;
 import org.example.demo.small.mock.FakeUserRepository;
 import org.example.demo.small.mock.TestDateHolder;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class UserServiceTest {
 
@@ -72,7 +74,8 @@ class UserServiceTest {
         //when
         //then
         assertThatThrownBy(() -> userService.save(userCreate))
-                .isInstanceOf(CommonException.class);
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.ALREADY_EXISTS_USER.getMessage());
     }
 
     @Test
@@ -98,10 +101,12 @@ class UserServiceTest {
         User result = userService.getById(1L);
 
         //then
-        assertThat(result.getId()).isEqualTo(1);
-        assertThat(result.getUsername()).isEqualTo("tester01");
-        assertThat(result.getPassword()).isEqualTo("encoded:testerpw1");
-        assertThat(result.getCreateAt()).isEqualTo("20250604000001");
+        assertAll(
+                () -> assertThat(result.getId()).isEqualTo(1),
+                () -> assertThat(result.getUsername()).isEqualTo("tester01"),
+                () -> assertThat(result.getPassword()).isEqualTo("encoded:testerpw1"),
+                () -> assertThat(result.getCreateAt()).isEqualTo("20250604000001")
+        );
     }
 
     @Test
@@ -110,6 +115,7 @@ class UserServiceTest {
         //when
         //then
         assertThatThrownBy(() -> userService.getById(1234L))
-                .isInstanceOf(CommonException.class);
+                .isInstanceOf(CommonException.class)
+                .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("USER"));
     }
 }
