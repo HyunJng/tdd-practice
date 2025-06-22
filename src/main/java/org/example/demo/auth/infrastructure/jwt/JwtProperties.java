@@ -1,4 +1,4 @@
-package org.example.demo.auth.infrastructure.vo;
+package org.example.demo.auth.infrastructure.jwt;
 
 
 import lombok.AllArgsConstructor;

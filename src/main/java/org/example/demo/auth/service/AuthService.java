@@ -3,7 +3,7 @@ package org.example.demo.auth.service;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.example.demo.auth.domain.UserLogin;
-import org.example.demo.auth.infrastructure.JwtManager;
+import org.example.demo.auth.infrastructure.jwt.JwtManager;
 import org.example.demo.common.encrypt.service.port.PasswordEncoder;
 import org.example.demo.common.exception.domain.CommonException;
 import org.example.demo.common.exception.domain.ErrorCode;

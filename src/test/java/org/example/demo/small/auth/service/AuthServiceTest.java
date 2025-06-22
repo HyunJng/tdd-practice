@@ -3,8 +3,8 @@ package org.example.demo.small.auth.service;
 
 import org.assertj.core.api.Assertions;
 import org.example.demo.auth.domain.UserLogin;
-import org.example.demo.auth.infrastructure.JwtManager;
-import org.example.demo.auth.infrastructure.vo.JwtProperties;
+import org.example.demo.auth.infrastructure.jwt.JwtManager;
+import org.example.demo.auth.infrastructure.jwt.JwtProperties;
 import org.example.demo.auth.service.AuthService;
 import org.example.demo.common.exception.domain.CommonException;
 import org.example.demo.common.exception.domain.ErrorCode;

@@ -1,7 +1,7 @@
 package org.example.demo.medium.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.demo.auth.infrastructure.JwtManager;
+import org.example.demo.auth.infrastructure.jwt.JwtManager;
 import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.post.controller.dto.PostChange;
 import org.example.demo.post.controller.dto.PostSave;

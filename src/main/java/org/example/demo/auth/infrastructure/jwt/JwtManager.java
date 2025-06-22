@@ -1,9 +1,8 @@
-package org.example.demo.auth.infrastructure;
+package org.example.demo.auth.infrastructure.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Builder;
-import org.example.demo.auth.infrastructure.vo.JwtProperties;
 import org.example.demo.common.exception.domain.CommonException;
 import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.common.time.port.DateHolder;

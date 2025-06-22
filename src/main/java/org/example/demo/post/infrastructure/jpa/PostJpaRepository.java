@@ -1,5 +1,6 @@
-package org.example.demo.post.infrastructure;
+package org.example.demo.post.infrastructure.jpa;
 
+import org.example.demo.post.infrastructure.entity.PostEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

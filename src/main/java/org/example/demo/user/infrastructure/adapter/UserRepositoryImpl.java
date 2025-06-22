@@ -1,9 +1,9 @@
-package org.example.demo.user.infrastructure.adaptor;
+package org.example.demo.user.infrastructure.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.example.demo.user.domain.User;
-import org.example.demo.user.infrastructure.UserEntity;
-import org.example.demo.user.infrastructure.UserJpaRepository;
+import org.example.demo.user.infrastructure.entity.UserEntity;
+import org.example.demo.user.infrastructure.jpa.UserJpaRepository;
 import org.example.demo.user.service.port.UserRepository;
 import org.springframework.stereotype.Service;
 
