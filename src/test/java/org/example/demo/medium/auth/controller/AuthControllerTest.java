@@ -12,10 +12,10 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+//@ActiveProfiles("prod")
 @SpringBootTest
 @AutoConfigureMockMvc
 @SqlGroup(value = {
@@ -42,8 +42,8 @@ class AuthControllerTest {
                         .contentType("application/json")
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").isString())
-                .andDo(print());
+                .andExpect(jsonPath("$.accessToken").isString());
+//                .andDo(print());
     }
 
     @Test
@@ -61,7 +61,7 @@ class AuthControllerTest {
                         .contentType("application/json")
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").isString())
-                .andDo(print());
+                .andExpect(jsonPath("$.message").isString());
+//                .andDo(print());
     }
 }

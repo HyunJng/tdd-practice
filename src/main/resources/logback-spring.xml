@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- 1. 로그 파일 경로 -->
+    <property name="LOG_PATH" value="${LOGGING_PATH:-./logs}"/>
+    <property name="APP_NAME" value="myapp"/>
+
+    <!-- 2. 콘솔 로그 (개발용) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 3. 파일 로그 (일일 롤링 + 30일 보관) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- 최근 30일만 보관 -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 4. 로컬 환경 -->
+    <springProfile name="local">
+        <logger name="org.hibernate.sql" level="OFF" />
+        <logger name="org.hibernate.SQL" level="OFF" />
+        <logger name="org.hibernate.type.descriptor.sql" level="OFF" />
+        <logger name="org.hibernate.type.BasicTypeRegistry" level="OFF" />
+        <logger name="org.hibernate.orm" level="OFF" />
+        <logger name="org.hibernate.query.sqm.function.SqmFunctionRegistry" level="OFF" />
+        <logger name="org.springframework.boot.autoconfigure.logging" level="OFF" />
+        <logger name="org.springframework.beans.factory.support" level="OFF" />
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+    <!-- 5. 운영 환경 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+</configuration>

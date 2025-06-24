@@ -17,10 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+//@ActiveProfiles("prod")
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
@@ -45,8 +45,8 @@ class PostControllerTest {
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.pageable.length()").exists())
-                .andDo(print());
+                .andExpect(jsonPath("$.pageable.length()").exists());
+//                .andDo(print());
     }
 
     @Test
@@ -58,8 +58,8 @@ class PostControllerTest {
                         .param("page", "string")
                         .param("size", "1"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": page"))
-                .andDo(print());
+                .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": page"));
+//                .andDo(print());
     }
 
     @Test
@@ -73,8 +73,8 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.content").isString())
                 .andExpect(jsonPath("$.writerId").isNumber())
                 .andExpect(jsonPath("$.writer").isString())
-                .andExpect(jsonPath("$.createAt").isString())
-                .andDo(print());
+                .andExpect(jsonPath("$.createAt").isString());
+//                .andDo(print());
     }
 
     @Test
@@ -84,8 +84,8 @@ class PostControllerTest {
         //then
         mockMvc.perform(get("/api/posts/{id}", 123456))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("존재하지않는 Post 입니다"))
-                .andDo(print());
+                .andExpect(jsonPath("$.message").value("존재하지않는 Post 입니다"));
+//                .andDo(print());
     }
 
     @Test
@@ -109,8 +109,8 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.content").value("게시글 생성 테스트입니다."))
                 .andExpect(jsonPath("$.writerId").value(1))
                 .andExpect(jsonPath("$.writer").isString())
-                .andExpect(jsonPath("$.createAt").isString())
-                .andDo(print());
+                .andExpect(jsonPath("$.createAt").isString());
+//                .andDo(print());
     }
 
     @Test
@@ -130,8 +130,8 @@ class PostControllerTest {
                         .header("Authorization", "Bearer " + token)
                         .content(requestStr))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("존재하지않는 USER 입니다"))
-                .andDo(print());
+                .andExpect(jsonPath("$.message").value("존재하지않는 USER 입니다"));
+//                .andDo(print());
     }
 
     @Test
@@ -156,8 +156,8 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.writerId").isNumber())
                 .andExpect(jsonPath("$.writer").isString())
                 .andExpect(jsonPath("$.createAt").isString())
-                .andExpect(jsonPath("$.modifiedAt").isString())
-                .andDo(print());
+                .andExpect(jsonPath("$.modifiedAt").isString());
+//                .andDo(print());
     }
 
     @Test

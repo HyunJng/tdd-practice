@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+//@ActiveProfiles("prod")
 @AutoConfigureMockMvc
 @SpringBootTest
 @SqlGroup(value = {
@@ -59,8 +60,8 @@ class UserControllerTest {
                         .content(request2))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": username"))
-                .andDo(print());
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": username"));
+//                .andDo(print());
 
     }
 
@@ -86,16 +87,16 @@ class UserControllerTest {
                         .content(request1))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": username"))
-                .andDo(print());
+                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": username"));
+//                .andDo(print());
 
         mockMvc.perform(post("/api/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request2))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": username"))
-                .andDo(print());
+                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": username"));
+//                .andDo(print());
 
     }
     @Test
@@ -120,17 +121,16 @@ class UserControllerTest {
                         .content(request1))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": password"))
-                .andDo(print());
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": password"));
+//                .andDo(print());
 
         mockMvc.perform(post("/api/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request2))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": password"))
-                .andDo(print());
-
+                        .value(ErrorCode.BAD_REQUEST_PARAM_SIZE.getMessage() + ": password"));
+//                .andDo(print());
     }
 
     @Test
@@ -150,8 +150,8 @@ class UserControllerTest {
                         .content(request1))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": password"))
-                .andDo(print());
+                        .value(ErrorCode.BAD_REQUEST_PARAM_FORMAT.getMessage() + ": password"));
+//                .andDo(print());
 
     }
 
@@ -172,7 +172,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.username").isString())
-                .andExpect(jsonPath("$.createAt").isString())
-                .andDo(print());
+                .andExpect(jsonPath("$.createAt").isString());
+//                .andDo(print());
     }
 }

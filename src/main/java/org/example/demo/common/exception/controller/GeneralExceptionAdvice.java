@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @Hidden // swagger 충돌 제거
 @Slf4j
@@ -17,6 +20,8 @@ public class GeneralExceptionAdvice {
 
     @ExceptionHandler(value = CommonException.class)
     public ResponseEntity<ErrorFormat> commonExceptionHandler(CommonException commonException) {
+        log.debug("[CommonException] message = {}", commonException.getMessage());
+
         return ResponseEntity
                 .status(commonException.getErrorCode().getStatus())
                 .body(new ErrorFormat(commonException.getMessage()));
@@ -24,13 +29,32 @@ public class GeneralExceptionAdvice {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorFormat> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException) {
+        ContentCachingRequestWrapper request = new ContentCachingRequestWrapper(
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+        String content = new String(request.getContentAsByteArray());
+        String requestURI = request.getRequestURI();
         String cause = methodArgumentNotValidException.getFieldError().getCode();
         String field = methodArgumentNotValidException.getFieldError().getField();
+        log.debug("[BindingException] error = {}:{}, uri={}, request={}", cause, field, requestURI, content);
 
         ErrorCode errorCode = getValidExceptionErrorCode(cause);
         return ResponseEntity
                 .status(errorCode.getStatus())
                 .body(new ErrorFormat(errorCode.getMessage() + ": " + field));
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ErrorFormat> exceptionHandler(Exception exception) {
+        ContentCachingRequestWrapper request = new ContentCachingRequestWrapper(
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+        String requestURI = request.getRequestURI();
+        String method = request.getMethod();
+        String content = new String(request.getContentAsByteArray());
+
+        log.error("[Unknown Error] uri={} {}, request={}", method, requestURI, content, exception);
+        return ResponseEntity
+                .internalServerError()
+                .body(new ErrorFormat("미지정 오류. 개발자 문의 필요"));
     }
 
     private ErrorCode getValidExceptionErrorCode(String cause) {
