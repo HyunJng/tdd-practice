@@ -1,6 +1,7 @@
 package org.example.demo.common.exception.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.demo.common.exception.controller.dto.ErrorFormat;
 import org.example.demo.common.exception.domain.CommonException;
@@ -28,14 +29,14 @@ public class GeneralExceptionAdvice {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorFormat> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException) {
-        ContentCachingRequestWrapper request = new ContentCachingRequestWrapper(
-                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+    public ResponseEntity<ErrorFormat> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException,
+                                                                              HttpServletRequest httpServletRequest) {
+        ContentCachingRequestWrapper request = (ContentCachingRequestWrapper) httpServletRequest;
         String content = new String(request.getContentAsByteArray());
         String requestURI = request.getRequestURI();
         String cause = methodArgumentNotValidException.getFieldError().getCode();
         String field = methodArgumentNotValidException.getFieldError().getField();
-        log.debug("[BindingException] error = {}:{}, uri={}, request={}", cause, field, requestURI, content);
+        log.debug("[BindingException] error = {}:{}, uri={}, request={}", cause, field, requestURI, content); // TODO: masking 처리
 
         ErrorCode errorCode = getValidExceptionErrorCode(cause);
         return ResponseEntity
