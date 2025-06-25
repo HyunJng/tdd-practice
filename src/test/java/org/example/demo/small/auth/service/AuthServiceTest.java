@@ -1,13 +1,12 @@
 package org.example.demo.small.auth.service;
 
 
-import org.assertj.core.api.Assertions;
 import org.example.demo.auth.domain.UserLogin;
-import org.example.demo.auth.infrastructure.jwt.JwtManager;
-import org.example.demo.auth.infrastructure.jwt.JwtProperties;
 import org.example.demo.auth.service.AuthService;
+import org.example.demo.auth.service.port.JwtManager;
 import org.example.demo.common.exception.domain.CommonException;
 import org.example.demo.common.exception.domain.ErrorCode;
+import org.example.demo.small.mock.FakeJwtManager;
 import org.example.demo.small.mock.FakePasswordEncoder;
 import org.example.demo.small.mock.FakeUserRepository;
 import org.example.demo.small.mock.TestDateHolder;
@@ -16,6 +15,7 @@ import org.example.demo.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuthServiceTest {
@@ -38,10 +38,7 @@ class AuthServiceTest {
                 .dateHolder(testDateHolder)
                 .passwordEncoder(fakePasswordEncoder)
                 .build();
-        jwtManager = JwtManager.builder()
-                .jwtProperties(new JwtProperties("bXktdmVyeS1zdHJvbmctand0LXNlY3JldC1rZXktdGhhdC1pcy1sb25nLWVub3VnaA=="))
-                .dateHolder(testDateHolder)
-                .build();
+        jwtManager = new FakeJwtManager();
         authService = AuthService.builder()
                 .passwordEncoder(new FakePasswordEncoder())
                 .userRepository(fakeUserRepository)
@@ -68,7 +65,7 @@ class AuthServiceTest {
         //then
         assertThatThrownBy(() -> authService.login(userLogin))
                 .isInstanceOf(CommonException.class)
-                .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("user") );
+                .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("user"));
     }
 
     @Test
@@ -95,11 +92,9 @@ class AuthServiceTest {
                 .build();
         //when
         String loginToken = authService.login(userLogin);
+        boolean result = jwtManager.validateToken(loginToken);
 
         //then
-        Assertions.assertThatCode(() -> {
-            jwtManager.validateToken(loginToken);
-        }).doesNotThrowAnyException();
-
+        assertThat(result).isTrue();
     }
 }

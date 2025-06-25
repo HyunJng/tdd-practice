@@ -1,41 +1,37 @@
-package org.example.demo.small.auth.service;
+package org.example.demo.small.auth.infrastructure.jwt;
 
 
-import org.example.demo.auth.infrastructure.jwt.JwtManager;
+import org.example.demo.auth.infrastructure.jwt.JwtManagerImpl;
 import org.example.demo.auth.infrastructure.jwt.JwtProperties;
-import org.example.demo.common.exception.domain.CommonException;
-import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.small.mock.TestDateHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class JwtManagerTest {
+class JwtManagerImplTest {
 
-    private JwtManager jwtManager;
+    private JwtManagerImpl jwtManager;
     private TestDateHolder testDateHolder;
 
     @BeforeEach
     public void init() {
         testDateHolder = new TestDateHolder("20250621000001");
-        jwtManager = JwtManager.builder()
+        jwtManager = JwtManagerImpl.builder()
                 .jwtProperties(new JwtProperties("bXktdmVyeS1zdHJvbmctand0LXNlY3JldC1rZXktdGhhdC1pcy1sb25nLWVub3VnaA=="))
                 .dateHolder(testDateHolder)
                 .build();
     }
 
     @Test
-    void 만료된_토큰을_오류를_발생시킨다() throws Exception {
+    void 만료된_토큰을_검증을_통과하지_못한다() throws Exception {
         //given
         String token = jwtManager.createToken(1L);
 
         //when
         //then
-        assertThatThrownBy(() -> jwtManager.validateToken(token))
-                .isInstanceOf(CommonException.class)
-                .hasMessageContaining(ErrorCode.EXPIRES_RESOURCES.getMessage("JWT token"));
+        boolean result = jwtManager.validateToken(token);
+        assertThat(result).isFalse();
     }
 
     @Test

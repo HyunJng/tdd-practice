@@ -3,7 +3,8 @@ package org.example.demo.auth.infrastructure.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Builder;
-import org.example.demo.common.exception.domain.CommonException;
+import lombok.extern.slf4j.Slf4j;
+import org.example.demo.auth.service.port.JwtManager;
 import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.common.time.port.DateHolder;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,9 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
+@Slf4j
 @Component
-public class JwtManager {
+public class JwtManagerImpl implements JwtManager {
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
 
     private final Key key;
@@ -22,7 +24,7 @@ public class JwtManager {
     private final JwtProperties jwtProperties;
 
     @Builder
-    public JwtManager(DateHolder dateHolder, JwtProperties jwtProperties) {
+    public JwtManagerImpl(DateHolder dateHolder, JwtProperties jwtProperties) {
         this.dateHolder = dateHolder;
         this.jwtProperties = jwtProperties;
         this.signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -34,6 +36,7 @@ public class JwtManager {
         return Keys.hmacShaKeyFor(bytes);
     }
 
+    @Override
     public String createToken(long userId) {
         long now = dateHolder.nowEpochTime();
 
@@ -45,20 +48,24 @@ public class JwtManager {
                         .compact();
     }
 
-    public void validateToken(String token) {
+    @Override
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
         } catch (SecurityException | MalformedJwtException e) {
-            throw new CommonException(ErrorCode.INVALID_RESOURCES, "JWT 서명");
+            log.debug(ErrorCode.INVALID_RESOURCES.getMessage("JWT 서명"));
         } catch (ExpiredJwtException e) {
-            throw new CommonException(ErrorCode.EXPIRES_RESOURCES, "JWT token");
+            log.debug(ErrorCode.EXPIRES_RESOURCES.getMessage("JWT token"));
         } catch (UnsupportedJwtException e) {
-            throw new CommonException(ErrorCode.UNSUPPORTED_RESOURCES, "JWT token");
+            log.debug(ErrorCode.UNSUPPORTED_RESOURCES.getMessage("JWT token"));
         } catch (IllegalArgumentException e) {
-            throw new CommonException(ErrorCode.WRONG_RESOURCES, "JWT token");
+            log.debug(ErrorCode.WRONG_RESOURCES.getMessage("JWT token"));
         }
+        return false;
     }
 
+    @Override
     public long getUserIdFromToken(String token) {
         String subject = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
