@@ -2,15 +2,11 @@ package org.example.demo.common.logging;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import java.io.IOException;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@Component
+@Deprecated // SpringSecurity 도입하면서 사용 불가
 public class JsonRequestCachingFilter implements Filter {
 
     @Override

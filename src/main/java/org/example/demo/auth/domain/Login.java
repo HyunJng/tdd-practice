@@ -6,19 +6,18 @@ import org.example.demo.auth.controller.dto.UserLoginDto;
 import org.example.demo.common.encrypt.service.port.PasswordEncoder;
 
 @Getter
-public class UserLogin {
-
+public class Login {
     private String username;
     private String password;
 
     @Builder
-    public UserLogin(String username, String password) {
+    public Login(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public static UserLogin from(UserLoginDto.Request request) {
-        return UserLogin.builder()
+    public static Login from(UserLoginDto.Request request) {
+        return Login.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
                 .build();
@@ -27,4 +26,5 @@ public class UserLogin {
     public boolean isCorrectPassword(PasswordEncoder passwordEncoder, String userPassword) {
         return passwordEncoder.isMatcher(password, userPassword);
     }
+
 }

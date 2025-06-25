@@ -1,4 +1,4 @@
-package org.example.demo.auth.controller;
+package org.example.demo.auth.infrastructure.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;

@@ -5,6 +5,7 @@ import org.example.demo.auth.service.port.JwtManager;
 import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.post.controller.dto.PostChange;
 import org.example.demo.post.controller.dto.PostSave;
+import org.example.demo.user.domain.UserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,6 +16,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -94,7 +97,7 @@ class PostControllerTest {
         PostSave.Request request = new PostSave.Request();
         request.setTitle("테스트타이틀");
         request.setContent("게시글 생성 테스트입니다.");
-        String token = jwtManager.createToken(1L);
+        String token = jwtManager.createToken(1L, "testuser1", List.of(UserRole.ROLE_MEMBER));
 
         String requestStr = new ObjectMapper().writeValueAsString(request);
 
@@ -119,7 +122,7 @@ class PostControllerTest {
         PostSave.Request request = new PostSave.Request();
         request.setTitle("테스트타이틀");
         request.setContent("게시글 생성 테스트입니다.");
-        String token = jwtManager.createToken(123456);
+        String token = jwtManager.createToken(123456, "testuser1", List.of(UserRole.ROLE_MEMBER));
 
         String requestStr = new ObjectMapper().writeValueAsString(request);
 
@@ -140,7 +143,7 @@ class PostControllerTest {
         PostChange.Request request = new PostChange.Request();
         request.setTitle("수정 타이틀");
         request.setContent("수정 테스트 중입니다");
-        String token = jwtManager.createToken(1L);
+        String token = jwtManager.createToken(1L, "testuser1", List.of(UserRole.ROLE_MEMBER));
 
         String requestStr = new ObjectMapper().writeValueAsString(request);
 
@@ -163,7 +166,7 @@ class PostControllerTest {
     @Test
     void 게시글_작성자는_게시글을_삭제할_수_있다() throws Exception {
         //given
-        String token = jwtManager.createToken(1L);
+        String token = jwtManager.createToken(1L, "testuser1", List.of(UserRole.ROLE_MEMBER));
         //when
         //then
         mockMvc.perform(delete("/api/posts/{id}", 1)

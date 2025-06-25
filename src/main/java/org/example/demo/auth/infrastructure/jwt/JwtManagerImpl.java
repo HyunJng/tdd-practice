@@ -5,13 +5,16 @@ import io.jsonwebtoken.security.Keys;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.demo.auth.service.port.JwtManager;
+import org.example.demo.auth.service.port.TokenPayload;
 import org.example.demo.common.exception.domain.ErrorCode;
 import org.example.demo.common.time.port.DateHolder;
+import org.example.demo.user.domain.UserRole;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -37,11 +40,14 @@ public class JwtManagerImpl implements JwtManager {
     }
 
     @Override
-    public String createToken(long userId) {
+    public String createToken(long userId, String username, List<UserRole> roles) {
         long now = dateHolder.nowEpochTime();
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
+        claims.put("roles", roles);
 
         return Jwts.builder()
-                        .setSubject(String.valueOf(userId))
+                        .setClaims(claims)
                         .setExpiration(new Date(now + TOKEN_TIME))
                         .setIssuedAt(new Date(now))
                         .signWith(key, signatureAlgorithm)
@@ -66,11 +72,15 @@ public class JwtManagerImpl implements JwtManager {
     }
 
     @Override
-    public long getUserIdFromToken(String token) {
-        String subject = Jwts.parserBuilder().setSigningKey(key).build()
+    public TokenPayload parseClaims(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-        return Long.parseLong(subject);
+                .getBody();
+
+        return TokenPayload.builder()
+                .id(claims.get("userId", Long.class))
+                .usename(claims.getSubject())
+                .roles(claims.get("roles", List.class))
+                .build();
     }
 }

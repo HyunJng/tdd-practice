@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.demo.auth.controller.dto.UserLoginDto;
-import org.example.demo.auth.domain.UserLogin;
+import org.example.demo.auth.domain.Login;
 import org.example.demo.auth.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginDto.Response> login(@Valid @RequestBody UserLoginDto.Request request) {
-        String token = authService.login(UserLogin.from(request));
+        String token = authService.login(Login.from(request));
         return ResponseEntity.ok(new UserLoginDto.Response(token));
     }
 }

@@ -1,7 +1,7 @@
 package org.example.demo.small.auth.service;
 
 
-import org.example.demo.auth.domain.UserLogin;
+import org.example.demo.auth.domain.Login;
 import org.example.demo.auth.service.AuthService;
 import org.example.demo.auth.service.port.JwtManager;
 import org.example.demo.common.exception.domain.CommonException;
@@ -57,13 +57,13 @@ class AuthServiceTest {
     @Test
     void 회원이_아니면_로그인에_실패한다() throws Exception {
         //given
-        UserLogin userLogin = UserLogin.builder()
+        Login login = Login.builder()
                 .username("imnotuser")
                 .password("1234")
                 .build();
         //when
         //then
-        assertThatThrownBy(() -> authService.login(userLogin))
+        assertThatThrownBy(() -> authService.login(login))
                 .isInstanceOf(CommonException.class)
                 .hasMessageContaining(ErrorCode.RESOURCE_NOT_FOUND.getMessage("user"));
     }
@@ -71,13 +71,13 @@ class AuthServiceTest {
     @Test
     void 비밀번호가_틀리면_로그인에_실패한다() throws Exception {
         //given
-        UserLogin userLogin = UserLogin.builder()
+        Login login = Login.builder()
                 .username("tester01")
                 .password("1234")
                 .build();
         //when
         //then
-        assertThatThrownBy(() -> authService.login(userLogin))
+        assertThatThrownBy(() -> authService.login(login))
                 .isInstanceOf(CommonException.class)
                 .hasMessageContaining(ErrorCode.WRONG_REQUEST_PARAM_DATA.getMessage("password"));
     }
@@ -86,12 +86,12 @@ class AuthServiceTest {
     void 로그인에_성공하면_유효한_jwt_토큰을_반환한다() throws Exception {
         //given
         testDateHolder.setUseRealTimeInOneTime();
-        UserLogin userLogin = UserLogin.builder()
+        Login login = Login.builder()
                 .username("tester01")
                 .password("testerpw1")
                 .build();
         //when
-        String loginToken = authService.login(userLogin);
+        String loginToken = authService.login(login);
         boolean result = jwtManager.validateToken(loginToken);
 
         //then
