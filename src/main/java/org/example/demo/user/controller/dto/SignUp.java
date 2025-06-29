@@ -1,5 +1,6 @@
 package org.example.demo.user.controller.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import org.example.demo.user.domain.User;
 public class SignUp {
 
     @Data
+    @Schema(name = "SignUpRequest", description = "회원 가입 요청")
     public static class Request {
 
         @NotNull
@@ -25,6 +27,7 @@ public class SignUp {
     }
 
     @Data
+    @Schema(name = "SignUpResponse", description = "회원 가입 요청")
     public static class Response {
         private long id;
         private String username;

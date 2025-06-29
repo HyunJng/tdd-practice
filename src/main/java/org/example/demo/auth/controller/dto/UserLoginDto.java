@@ -1,5 +1,6 @@
 package org.example.demo.auth.controller.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.Data;
 public class UserLoginDto {
 
     @Data
+    @Schema(name = "UserLoginRequest", description = "사용자 로그인 요청")
     public static class Request {
         @NotBlank
         private String username;
@@ -21,6 +23,7 @@ public class UserLoginDto {
     }
 
     @Data
+    @Schema(name = "UserLoginResponse", description = "사용자 로그인 응답")
     public static class Response {
         private String accessToken;
 

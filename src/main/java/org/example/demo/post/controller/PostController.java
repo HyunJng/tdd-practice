@@ -1,6 +1,5 @@
 package org.example.demo.post.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.demo.auth.domain.LoginUser;
@@ -12,15 +11,15 @@ import org.example.demo.post.controller.dto.PostSave;
 import org.example.demo.post.domain.PostCreate;
 import org.example.demo.post.domain.PostUpdate;
 import org.example.demo.post.service.PostService;
+import org.example.demo.post.controller.docs.PostControllerSwagger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "게시글 CRUD")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
-public class PostController {
+public class PostController implements PostControllerSwagger {
 
     private final PostService postService;
 

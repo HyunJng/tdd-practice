@@ -1,5 +1,6 @@
 package org.example.demo.post.controller.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import org.example.demo.post.domain.Post;
@@ -7,12 +8,14 @@ import org.example.demo.post.domain.Post;
 public class PostSave {
 
     @Data
+    @Schema(name = "PostSaveRequest", description = "게시글 저장 요청")
     public static class Request {
         private String title;
         private String content;
     }
 
     @Data
+    @Schema(name = "PostSaveResponse", description = "게시글 저장 응답")
     public static class Response {
         private String title;
         private long writerId;

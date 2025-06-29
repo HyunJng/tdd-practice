@@ -1,8 +1,8 @@
 package org.example.demo.user.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.demo.user.controller.docs.UserControllerSwagger;
 import org.example.demo.user.controller.dto.SignUp;
 import org.example.demo.user.domain.UserCreate;
 import org.example.demo.user.service.UserService;
@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "유저정보 Controller")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController implements UserControllerSwagger {
 
     private final UserService userService;
 

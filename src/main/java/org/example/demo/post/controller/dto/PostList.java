@@ -1,5 +1,6 @@
 package org.example.demo.post.controller.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 public class PostList {
 
     @Data
+    @Schema(name = "PostListRequest", description = "게시글 목록 조회 요청")
     public static class Request {
         @Pattern(regexp = "\\d+")
         private String page;
@@ -22,6 +24,7 @@ public class PostList {
 
     @Data
     @Builder
+    @Schema(name = "PostListResponse", description = "게시글 목록 조회 응답")
     public static class Response {
         private long id;
         private String title;
