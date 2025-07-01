@@ -35,7 +35,7 @@ public class AwsImageManager implements ImageManager {
     }
 
     private String getCloudfrontImageUrl(String fileName) {
-        return cloudFrontProperties.getDomain() + fileName;
+        return cloudFrontProperties.getDomain() + "/" + fileName;
     }
 
     @Override
