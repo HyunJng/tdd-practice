@@ -21,3 +21,10 @@ springdoc:
 jwt:
   secret:
     key: bXktdmVyeS1zdHJvbmctand0LXNlY3JldC1rZXktdGhhdC1pcy1sb25nLWVub3VnaA==
+
+aws:
+  s3:
+    bucket: tdd-bucket-01
+    region: ap-northeast-2
+  cloudfront:
+    domain: https://d2omdjdfhddmrs.cloudfront.net

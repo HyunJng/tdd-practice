@@ -14,7 +14,8 @@ public enum ErrorCode {
     EXPIRES_RESOURCES(HttpStatus.BAD_REQUEST, "만료된 %1 입니다."),
     UNSUPPORTED_RESOURCES(HttpStatus.BAD_REQUEST, "지원되지 않는 %1 입니다."),
     WRONG_RESOURCES(HttpStatus.BAD_REQUEST, "잘못된 %1 입니다."),
-    ALREADY_EXISTS_USER(HttpStatus.NOT_ACCEPTABLE, "이미 존재하는 회원입니다");
+    ALREADY_EXISTS_USER(HttpStatus.NOT_ACCEPTABLE, "이미 존재하는 회원입니다"),
+    EXTERNAL_TRX_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "외부 통신 실패");
 
     @Getter
     private final HttpStatus status;

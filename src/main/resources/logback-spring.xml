@@ -36,7 +36,7 @@
         <logger name="org.hibernate.query.sqm.function.SqmFunctionRegistry" level="OFF" />
         <logger name="org.springframework.boot.autoconfigure.logging" level="OFF" />
         <logger name="org.springframework.beans.factory.support" level="OFF" />
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </root>
