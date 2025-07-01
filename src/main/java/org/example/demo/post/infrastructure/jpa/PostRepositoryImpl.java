@@ -1,9 +1,7 @@
-package org.example.demo.post.infrastructure.adapter;
+package org.example.demo.post.infrastructure.jpa;
 
 import lombok.RequiredArgsConstructor;
 import org.example.demo.post.domain.Post;
-import org.example.demo.post.infrastructure.entity.PostEntity;
-import org.example.demo.post.infrastructure.jpa.PostJpaRepository;
 import org.example.demo.post.service.port.PostRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

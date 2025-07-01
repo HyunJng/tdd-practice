@@ -1,11 +1,11 @@
-package org.example.demo.post.infrastructure.entity;
+package org.example.demo.post.infrastructure.jpa;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.example.demo.post.domain.Post;
-import org.example.demo.user.infrastructure.entity.UserEntity;
+import org.example.demo.user.infrastructure.jpa.UserEntity;
 
 @Builder
 @AllArgsConstructor
