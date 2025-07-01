@@ -1,4 +1,4 @@
-package org.example.demo.medium.image.controller;
+package org.example.demo.large.image.controller;
 
 import org.example.demo.auth.service.port.JwtManager;
 import org.example.demo.user.domain.UserRole;

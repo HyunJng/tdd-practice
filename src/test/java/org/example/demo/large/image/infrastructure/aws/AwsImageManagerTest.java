@@ -1,4 +1,4 @@
-package org.example.demo.medium.image.infrastructure.aws;
+package org.example.demo.large.image.infrastructure.aws;
 
 import org.example.demo.image.domain.Image;
 import org.example.demo.image.infrastructure.aws.AwsImageManager;
