@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.example.demo.post.domain.Post;
 
+import java.util.List;
+
 public class PostSave {
 
     @Data
@@ -12,6 +14,7 @@ public class PostSave {
     public static class Request {
         private String title;
         private String content;
+        private List<Long> images;
     }
 
     @Data

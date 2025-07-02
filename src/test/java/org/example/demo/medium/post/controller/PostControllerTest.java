@@ -3,6 +3,8 @@ package org.example.demo.medium.post.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.demo.auth.service.port.JwtManager;
 import org.example.demo.common.exception.domain.ErrorCode;
+import org.example.demo.image.domain.Image;
+import org.example.demo.image.service.port.ImageMetaRepository;
 import org.example.demo.post.controller.dto.PostChange;
 import org.example.demo.post.controller.dto.PostSave;
 import org.example.demo.user.domain.UserRole;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +39,8 @@ class PostControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private JwtManager jwtManager;
+    @Autowired
+    private ImageMetaRepository imageMetaRepository;
 
     @Test
     void 게시글_목록을_조회할_수_있다() throws Exception {
@@ -172,5 +177,33 @@ class PostControllerTest {
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void 게시글은_이미지와_함께_저장할_수_있다() throws Exception {
+        //given
+        PostSave.Request request = new PostSave.Request();
+        request.setTitle("테스트타이틀");
+        request.setContent("이미지 게시글 생성 테스트. 실제로는 content에도 이미지 url이 들어있다.");
+        request.setImages(List.of(1L));
+        String token = jwtManager.createToken(1L, "testuser1", List.of(UserRole.ROLE_MEMBER));
+
+        String requestStr = new ObjectMapper().writeValueAsString(request);
+
+        //when
+        //then
+        mockMvc.perform(post("/api/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
+                        .content(requestStr))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("테스트타이틀"))
+                .andExpect(jsonPath("$.content").value("이미지 게시글 생성 테스트. 실제로는 content에도 이미지 url이 들어있다."))
+                .andExpect(jsonPath("$.writerId").value(1))
+                .andExpect(jsonPath("$.writer").isString())
+                .andExpect(jsonPath("$.createAt").isString());
+//                .andDo(print());
+
+        Image findImage = imageMetaRepository.findByPostId(3L).orElse(null);
+        assertThat(findImage).isNotNull();
+    }
 }
-//@ActiveProfiles("prod")

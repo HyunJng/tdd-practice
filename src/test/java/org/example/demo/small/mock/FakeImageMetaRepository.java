@@ -1,6 +1,7 @@
 package org.example.demo.small.mock;
 
 import org.example.demo.image.domain.Image;
+import org.example.demo.image.domain.PostImageUpdate;
 import org.example.demo.image.service.port.ImageMetaRepository;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeImageMetaRepository implements ImageMetaRepository {
 
-    private AtomicLong generatedId = new AtomicLong(2);
+    private AtomicLong generatedId = new AtomicLong(0);
     private List<Image> data = new ArrayList<>();
 
     @Override
@@ -35,5 +36,15 @@ public class FakeImageMetaRepository implements ImageMetaRepository {
     @Override
     public Optional<Image> findById(long id) {
         return data.stream().filter(item -> item.getId() == id).findAny();
+    }
+
+    @Override
+    public void updateToUsedImage(List<PostImageUpdate> images) {
+        // disabled test
+    }
+
+    @Override
+    public Optional<Image> findByPostId(long postId) {
+        return Optional.empty(); // disabled test
     }
 }
