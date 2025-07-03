@@ -3,6 +3,7 @@ package org.example.demo.image.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.demo.auth.domain.LoginUser;
 import org.example.demo.auth.service.port.CurrentUser;
+import org.example.demo.image.controller.docs.ImageUploadControllerSwagger;
 import org.example.demo.image.controller.dto.ImageUpload;
 import org.example.demo.image.domain.Image;
 import org.example.demo.image.service.ImageService;
@@ -16,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/images")
-public class ImageUploadController {
+public class ImageUploadController implements ImageUploadControllerSwagger {
 
     private final ImageService imageService;
 
