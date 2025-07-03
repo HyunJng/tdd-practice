@@ -30,6 +30,7 @@ public class ImageMetaEntity {
     @Column(name = "used")
     private boolean used;
 
+    @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PostEntity post;
 

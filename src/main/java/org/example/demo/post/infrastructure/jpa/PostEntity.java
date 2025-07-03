@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.example.demo.image.infrastructure.jpa.ImageMetaEntity;
 import org.example.demo.post.domain.Post;
 import org.example.demo.user.infrastructure.jpa.UserEntity;
+
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -33,6 +36,9 @@ public class PostEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity writer;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<ImageMetaEntity> images;
 
     public static PostEntity from(Post post) {
         return PostEntity.builder()

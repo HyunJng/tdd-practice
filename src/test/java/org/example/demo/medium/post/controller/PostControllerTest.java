@@ -51,7 +51,7 @@ class PostControllerTest {
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content.length()").value(3))
                 .andExpect(jsonPath("$.pageable.length()").exists());
 //                .andDo(print());
     }
@@ -203,7 +203,21 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.createAt").isString());
 //                .andDo(print());
 
-        Image findImage = imageMetaRepository.findByPostId(3L).orElse(null);
+        Image findImage = imageMetaRepository.findByPostId(4L).orElse(null);
         assertThat(findImage).isNotNull();
+    }
+
+    @Test
+    void 게시글을_삭제하면_이미지도_함께_삭제된다() throws Exception {
+        //given
+        String token = jwtManager.createToken(1L, "testuser1", List.of(UserRole.ROLE_MEMBER));
+        //then
+        mockMvc.perform(delete("/api/posts/{id}", 3)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
+//                .andDo(print());
+
+        Image findImage = imageMetaRepository.findByPostId(3L).orElse(null);
+        assertThat(findImage).isNull();
     }
 }
